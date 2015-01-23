@@ -1,6 +1,9 @@
 #include <iostream>
 #include <unistd.h>
 #include <stdio.h>
+#include <string>
+#include <algorithm>
+
 using namespace std;
 
 //This is just skeleton code that I'll edit later
@@ -11,6 +14,15 @@ using namespace std;
 //Stay out of trouble and you won't get hurt.
 //Oooh. You're naked. Spare me.
 
+string parse(string command){
+  string current;
+  int one = command.find_first_of(";&|");
+  else if(command.find("&&")==one || command.find("||")==one || command.find(';' == one) { //it was a valid && || or ;command
+    current=command.substr(0,one);
+  }
+  return current;
+}
+
 int main(int argc, char **argv)
 {
   /*
@@ -18,20 +30,28 @@ int main(int argc, char **argv)
     cout << "argv[" << i << "] = " << argv[i] << endl;
   }
   */
+  cout << "$" << endl;
   //char *cmd="lsdoesnotexist";
-  char *cmd="ls";
-  int pid=fork();
-  if (pid== -1) {
-    perror("fork fail");
-  }
-  else if (pid == 0) {
-    if (execvp(cmd,argv) != 0) {
-      //cerr << "error in execvp" << endl;
-      perror("error in execvp");
+  string command;
+  cin >> command;
+  while(command!="exit"){
+    command=command.substr(0,command.find_first_of("#")); //anything after a # is a comment and should be ignored
+    string usethis = parse(command);
+    
+    int pid=fork();
+    if (pid== -1) { //something went wrong if pid is negative
+      perror("fork fail");
     }
-  }
-  else {
-    cerr << "will this print?!" << endl;
+    else if (pid == 0) { //we're in the child function if pid is 0
+      if (execvp(cmd,argv) != 0) {
+        //cerr << "error in execvp" << endl;
+        perror("error in execvp");
+      }
+    }
+    else { //otherwise we're in the parent function
+      cerr << "I'm not impressed. Find yourself some rags." << endl;
+    }
+    cin >> command;
   }
   return 0;
 }
