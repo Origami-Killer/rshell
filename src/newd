@@ -55,6 +55,8 @@ int main(int argc, char **argv)
       
       //now we have our cmd0 which is the command we're going to use for now
       
+      if(cmd0.find("exit")!=-1) break;
+      
       if(lastc==-1||lastc==0) letsgo(cmd0, argv); //last command was a semicolon or no previous command so just run
       else if(lastc==1){ //last command was &&
         if(lasts==true) { //and the last command succeeded so run
@@ -68,7 +70,7 @@ int main(int argc, char **argv)
       }
       lastc=nextc;
     }
-    
+    if(cmd0.find("exit")!=-1) break;
     cout << "$";
     cin >> cmd;
   }
