@@ -1,3 +1,2 @@
-# first rule
-program: all rshell
-    g++ -Wall -Werror -ansi -pedantic program all rshell
+program:
+    g++ all src/rshell.cpp -Wall -Werror -ansi -pedantic bin/program
